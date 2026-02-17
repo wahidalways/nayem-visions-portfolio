@@ -107,6 +107,38 @@ const FloatingConnectors = () => (
   </svg>
 );
 
+const TypingEffect = ({ text, delay = 0 }: { text: string; delay?: number }) => {
+  const [displayed, setDisplayed] = useState("");
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    const startTimer = setTimeout(() => setStarted(true), delay * 1000);
+    return () => clearTimeout(startTimer);
+  }, [delay]);
+
+  useEffect(() => {
+    if (!started) return;
+    let i = 0;
+    const timer = setInterval(() => {
+      i++;
+      setDisplayed(text.slice(0, i));
+      if (i >= text.length) clearInterval(timer);
+    }, 35);
+    return () => clearInterval(timer);
+  }, [started, text]);
+
+  return (
+    <span>
+      {displayed}
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+        className="inline-block w-[2px] h-[1em] bg-primary ml-0.5 align-text-bottom"
+      />
+    </span>
+  );
+};
+
 const Hero = () => {
   const [imgError, setImgError] = useState(false);
 
@@ -114,7 +146,6 @@ const Hero = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: "var(--gradient-hero-light)" }}>
       {/* Animated background layers */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Large ambient blobs */}
         <motion.div
           animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
@@ -128,13 +159,8 @@ const Hero = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-primary/[0.02] blur-[100px]" />
       </div>
 
-      {/* Particle field */}
       <ParticleField />
-
-      {/* Subtle grid */}
       <GridOverlay />
-
-      {/* Floating connector lines */}
       <FloatingConnectors />
 
       <div className="container mx-auto px-4 md:px-8 relative z-10">
@@ -164,14 +190,17 @@ const Hero = () => {
               <span className="gradient-text">Nayem</span>
             </motion.h1>
 
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base sm:text-lg text-muted-foreground max-w-xl mb-8 leading-relaxed"
             >
-              Bridging Business Needs with Technical Solutions — specializing in requirement analysis, comprehensive documentation, and stakeholder management.
-            </motion.p>
+              <TypingEffect
+                text="Bridging Business Needs with Technical Solutions — specializing in requirement analysis, comprehensive documentation, and stakeholder management."
+                delay={0.8}
+              />
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -179,18 +208,22 @@ const Hero = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center md:items-start gap-4 mb-8"
             >
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
                 className="px-8 py-3 rounded-xl font-heading font-semibold text-sm bg-primary text-primary-foreground hover:opacity-90 transition-opacity cursor-pointer"
               >
                 Get In Touch
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
                 className="px-8 py-3 rounded-xl font-heading font-semibold text-sm glass hover-lift cursor-pointer"
               >
                 View Projects
-              </button>
+              </motion.button>
             </motion.div>
 
             <motion.div
@@ -213,7 +246,6 @@ const Hero = () => {
             className="order-1 md:order-2 shrink-0"
           >
             <div className="relative">
-              {/* Gradient glow behind */}
               <motion.div
                 animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.15, 0.1] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -235,7 +267,6 @@ const Hero = () => {
                 )}
               </div>
 
-              {/* Decorative dots */}
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 30, repeat: Infinity, ease: "linear" }}

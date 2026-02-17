@@ -61,14 +61,17 @@ const Projects = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="glass rounded-2xl p-8 hover-lift group"
+              whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
+              className="glass rounded-2xl p-8 hover-glow group cursor-default"
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="font-heading font-bold text-xl group-hover:text-primary transition-colors">{project.title}</h3>
                   <p className="text-sm text-accent font-medium">{project.subtitle}</p>
                 </div>
-                <ExternalLink className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                <motion.div whileHover={{ scale: 1.2, rotate: 45 }}>
+                  <ExternalLink className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.div>
               </div>
 
               <div className="space-y-3 mb-6">
@@ -88,9 +91,13 @@ const Projects = () => {
 
               <div className="flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
-                  <span key={tag} className="px-3 py-1 rounded-full bg-primary/10 text-xs font-medium text-primary">
+                  <motion.span
+                    key={tag}
+                    whileHover={{ scale: 1.1 }}
+                    className="px-3 py-1 rounded-full bg-primary/10 text-xs font-medium text-primary"
+                  >
                     {tag}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
             </motion.div>

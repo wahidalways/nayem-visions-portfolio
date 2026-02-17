@@ -44,7 +44,8 @@ const Testimonials = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="glass rounded-2xl p-8 hover-lift relative"
+              whileHover={{ y: -8, scale: 1.03, transition: { duration: 0.25 } }}
+              className="glass rounded-2xl p-8 hover-glow relative"
             >
               <Quote className="w-8 h-8 text-primary/15 absolute top-6 right-6" />
               <p className="text-sm text-muted-foreground leading-relaxed mb-6 relative z-10">
