@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Share2, Linkedin, Twitter, Mail, Link } from "lucide-react";
+import { toast } from "sonner";
 
 const FloatingShare = () => {
   const [open, setOpen] = useState(false);
@@ -14,6 +15,7 @@ const FloatingShare = () => {
 
   const copyLink = () => {
     navigator.clipboard.writeText(url);
+    toast.success("Link copied!", { description: "Portfolio URL has been copied to clipboard." });
     setOpen(false);
   };
 
