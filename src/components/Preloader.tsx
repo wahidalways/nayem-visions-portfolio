@@ -2,100 +2,91 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const Preloader = ({ onComplete }: { onComplete: () => void }) => {
-  const [phase, setPhase] = useState<"logo" | "exit">("logo");
+  const [progress, setProgress] = useState(0);
+  const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    const timer1 = setTimeout(() => setPhase("exit"), 2000);
-    const timer2 = setTimeout(() => onComplete(), 2600);
+    const interval = setInterval(() => {
+      setProgress((p) => {
+        if (p >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return p + 2;
+      });
+    }, 30);
+
+    const exitTimer = setTimeout(() => setExiting(true), 1800);
+    const completeTimer = setTimeout(() => onComplete(), 2300);
+
     return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
+      clearInterval(interval);
+      clearTimeout(exitTimer);
+      clearTimeout(completeTimer);
     };
   }, [onComplete]);
 
+  const letterVariants = {
+    hidden: { y: 40, opacity: 0 },
+    visible: (i: number) => ({
+      y: 0,
+      opacity: 1,
+      transition: { delay: 0.1 + i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+    }),
+  };
+
+  const letters = ["M", "W", "N", "."];
+
   return (
     <AnimatePresence>
-      {phase !== "exit" ? null : null}
-      <motion.div
-        key="preloader"
-        initial={{ opacity: 1 }}
-        animate={phase === "exit" ? { opacity: 0, scale: 0.95 } : { opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
-        className="fixed inset-0 z-[9999] flex items-center justify-center bg-background"
-      >
-        <div className="flex flex-col items-center gap-6">
-          {/* Animated logo */}
-          <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="relative"
-          >
-            {/* Outer ring */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="absolute inset-0 -m-4 rounded-full border-2 border-primary/20"
-            />
-            <motion.div
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 1.2, delay: 0.4, ease: "easeInOut" }}
-              className="absolute inset-0 -m-4"
-            >
-              <svg viewBox="0 0 100 100" className="w-full h-full">
-                <motion.circle
-                  cx="50"
-                  cy="50"
-                  r="46"
-                  fill="none"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.2, delay: 0.4, ease: "easeInOut" }}
+      {!exiting && (
+        <motion.div
+          key="preloader"
+          exit={{ opacity: 0, y: -30 }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-background"
+        >
+          <div className="flex flex-col items-center gap-10">
+            {/* Logo letters */}
+            <div className="flex items-baseline overflow-hidden">
+              {letters.map((letter, i) => (
+                <motion.span
+                  key={i}
+                  custom={i}
+                  variants={letterVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className={`font-heading font-bold ${
+                    letter === "." ? "text-4xl md:text-5xl text-accent" : "text-5xl md:text-7xl gradient-text"
+                  }`}
+                >
+                  {letter}
+                </motion.span>
+              ))}
+            </div>
+
+            {/* Progress bar */}
+            <div className="w-48 md:w-64">
+              <div className="h-[3px] rounded-full bg-border overflow-hidden">
+                <motion.div
+                  initial={{ width: "0%" }}
+                  animate={{ width: `${progress}%` }}
+                  className="h-full rounded-full"
+                  style={{ background: "var(--gradient-primary)" }}
                 />
-              </svg>
-            </motion.div>
-
-            <motion.span
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="font-heading text-5xl md:text-6xl font-bold gradient-text block p-6"
-            >
-              MWN.
-            </motion.span>
-          </motion.div>
-
-          {/* Loading bar */}
-          <motion.div
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 120, opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.8 }}
-            className="h-0.5 rounded-full bg-border overflow-hidden"
-          >
-            <motion.div
-              initial={{ x: "-100%" }}
-              animate={{ x: "100%" }}
-              transition={{ duration: 0.8, delay: 1, repeat: Infinity, ease: "easeInOut" }}
-              className="h-full w-full rounded-full"
-              style={{ background: "var(--gradient-primary)" }}
-            />
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            transition={{ delay: 1 }}
-            className="text-xs text-muted-foreground tracking-[0.3em] uppercase font-heading"
-          >
-            Loading Portfolio
-          </motion.p>
-        </div>
-      </motion.div>
+              </div>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.5 }}
+                transition={{ delay: 0.6 }}
+                className="text-[10px] text-muted-foreground tracking-[0.4em] uppercase font-heading text-center mt-4"
+              >
+                Loading
+              </motion.p>
+            </div>
+          </div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 };
