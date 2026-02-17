@@ -1,0 +1,104 @@
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { ExternalLink } from "lucide-react";
+
+const projects = [
+  {
+    title: "CartUp",
+    subtitle: "E-commerce Platform",
+    problem: "Complex e-commerce requirements needed clear documentation and stakeholder alignment.",
+    solution: "Prepared comprehensive SRS, CR, and user stories for CartUp platform development.",
+    impact: "Enhanced development efficiency and improved documentation accuracy for e-commerce features.",
+    tags: ["SRS", "CR", "E-commerce", "User Stories"],
+  },
+  {
+    title: "ERP, Payroll & HRIS",
+    subtitle: "Enterprise Software",
+    problem: "Multiple enterprise systems required integrated analysis and documentation.",
+    solution: "Comprehensive analysis and documentation for ERP, Payroll, and HRIS solutions.",
+    impact: "On-time delivery and reduced documentation rework by 25%.",
+    tags: ["ERP", "HRIS", "Process Flows", "Documentation"],
+  },
+  {
+    title: "Foodi",
+    subtitle: "Food Delivery Platform",
+    problem: "Food delivery platform needed process optimization and requirement analysis.",
+    solution: "Assisted in requirement gathering and process analysis for food delivery workflows.",
+    impact: "Improved workflow clarity and supported smooth solution adoption.",
+    tags: ["Process Analysis", "Documentation", "Food Delivery"],
+  },
+  {
+    title: "Meditrip",
+    subtitle: "Medical Travel & Accommodation",
+    problem: "Complex medical travel platform required detailed requirement documentation.",
+    solution: "Supported requirement analysis for medical travel and accommodation features.",
+    impact: "Enhanced understanding of travel/accommodation platform requirements.",
+    tags: ["Travel Platform", "Requirement Analysis"],
+  },
+];
+
+const Projects = () => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <section id="projects" className="section-padding bg-secondary/30" ref={ref}>
+      <div className="container mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <span className="text-sm font-medium text-accent uppercase tracking-widest">Portfolio</span>
+          <h2 className="font-heading text-3xl md:text-5xl font-bold mt-3">Featured Projects</h2>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {projects.map((project, i) => (
+            <motion.div
+              key={project.title}
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="glass rounded-2xl p-8 hover-lift group"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="font-heading font-bold text-xl group-hover:text-primary transition-colors">{project.title}</h3>
+                  <p className="text-sm text-accent font-medium">{project.subtitle}</p>
+                </div>
+                <ExternalLink className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+
+              <div className="space-y-3 mb-6">
+                <div>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Challenge</span>
+                  <p className="text-sm text-muted-foreground mt-1">{project.problem}</p>
+                </div>
+                <div>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Solution</span>
+                  <p className="text-sm text-muted-foreground mt-1">{project.solution}</p>
+                </div>
+                <div>
+                  <span className="text-xs font-semibold text-accent uppercase tracking-wider">Impact</span>
+                  <p className="text-sm text-foreground font-medium mt-1">{project.impact}</p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span key={tag} className="px-3 py-1 rounded-full bg-primary/10 text-xs font-medium text-primary">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Projects;
