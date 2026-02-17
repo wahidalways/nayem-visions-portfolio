@@ -25,15 +25,20 @@ export default {
   				'sans-serif'
   			],
   			sans: [
+  				'Space Grotesk',
   				'ui-sans-serif',
   				'system-ui',
-  				'sans-serif',
-  				'Apple Color Emoji',
-  				'Segoe UI Emoji',
-  				'Segoe UI Symbol',
-  				'Noto Color Emoji'
+  				'-apple-system',
+  				'BlinkMacSystemFont',
+  				'Segoe UI',
+  				'Roboto',
+  				'Helvetica Neue',
+  				'Arial',
+  				'Noto Sans',
+  				'sans-serif'
   			],
   			serif: [
+  				'Lora',
   				'ui-serif',
   				'Georgia',
   				'Cambria',
@@ -42,6 +47,7 @@ export default {
   				'serif'
   			],
   			mono: [
+  				'Space Mono',
   				'ui-monospace',
   				'SFMono-Regular',
   				'Menlo',
@@ -119,7 +125,7 @@ export default {
   					height: '0'
   				}
   			},
-  			float: {
+  			'float': {
   				'0%, 100%': {
   					transform: 'translateY(0)'
   				},
@@ -169,7 +175,7 @@ export default {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
-  			float: 'float 6s ease-in-out infinite',
+  			'float': 'float 6s ease-in-out infinite',
   			'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
   			'slide-up': 'slide-up 0.6s ease-out',
   			'slide-in-left': 'slide-in-left 0.6s ease-out',
