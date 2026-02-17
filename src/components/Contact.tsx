@@ -30,7 +30,7 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="space-y-6"
           >
-            <a href="mailto:nayemwahid05@gmail.com" className="flex items-center gap-4 glass rounded-xl p-5 hover-lift">
+            <motion.a whileHover={{ y: -4, scale: 1.02 }} href="mailto:nayemwahid05@gmail.com" className="flex items-center gap-4 glass rounded-xl p-5 hover-glow block">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                 <Mail className="w-5 h-5 text-primary" />
               </div>
@@ -38,7 +38,7 @@ const Contact = () => {
                 <p className="text-sm text-muted-foreground">Email</p>
                 <p className="font-medium text-sm">nayemwahid05@gmail.com</p>
               </div>
-            </a>
+            </motion.a>
 
             <div className="flex items-center gap-4 glass rounded-xl p-5">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
@@ -51,22 +51,24 @@ const Contact = () => {
             </div>
 
             <div className="flex gap-4">
-              <a
+              <motion.a
+                whileHover={{ y: -3, scale: 1.03 }}
                 href="https://linkedin.com/in/nayemwahid"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 glass rounded-xl p-4 hover-lift text-sm font-medium"
+                className="flex-1 flex items-center justify-center gap-2 glass rounded-xl p-4 hover-glow text-sm font-medium"
               >
                 <Linkedin className="w-4 h-4 text-primary" /> LinkedIn
-              </a>
-              <a
+              </motion.a>
+              <motion.a
+                whileHover={{ y: -3, scale: 1.03 }}
                 href="https://twitter.com/mrbrainaxes"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 glass rounded-xl p-4 hover-lift text-sm font-medium"
+                className="flex-1 flex items-center justify-center gap-2 glass rounded-xl p-4 hover-glow text-sm font-medium"
               >
                 <Twitter className="w-4 h-4 text-primary" /> X (Twitter)
-              </a>
+              </motion.a>
             </div>
           </motion.div>
 
@@ -117,12 +119,14 @@ const Contact = () => {
                 placeholder="Tell me about your project..."
               />
             </div>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               type="submit"
               className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-heading font-semibold text-sm bg-primary text-primary-foreground hover:opacity-90 transition-opacity cursor-pointer"
             >
               <Send className="w-4 h-4" /> Send Message
-            </button>
+            </motion.button>
           </motion.form>
         </div>
       </div>

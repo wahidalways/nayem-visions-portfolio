@@ -40,15 +40,25 @@ const Skills = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="glass rounded-2xl p-8 hover-lift"
+              whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
+              className="glass rounded-2xl p-8 hover-glow"
             >
               <h3 className="font-heading font-semibold text-xl mb-6 gradient-text">{cat.title}</h3>
               <div className="flex flex-col gap-3">
-                {cat.skills.map((skill) => (
-                  <div key={skill} className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-accent shrink-0" />
+                {cat.skills.map((skill, j) => (
+                  <motion.div
+                    key={skill}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={inView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ delay: i * 0.15 + j * 0.05 + 0.3 }}
+                    className="flex items-center gap-3"
+                  >
+                    <motion.div
+                      whileHover={{ scale: 1.5 }}
+                      className="w-2 h-2 rounded-full bg-accent shrink-0"
+                    />
                     <span className="text-sm text-foreground">{skill}</span>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>

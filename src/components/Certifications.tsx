@@ -57,7 +57,8 @@ const Certifications = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className={`glass rounded-2xl p-6 hover-lift relative overflow-hidden ${
+              whileHover={{ y: -6, scale: 1.02, transition: { duration: 0.25 } }}
+              className={`glass rounded-2xl p-6 hover-glow relative overflow-hidden ${
                 cert.highlight ? "gradient-border" : ""
               }`}
             >

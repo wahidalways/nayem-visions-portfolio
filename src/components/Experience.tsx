@@ -72,7 +72,10 @@ const Experience = () => {
                 style={i % 2 === 0 ? { right: "-5px" } : { left: "-5px" }}
               />
 
-              <div className="glass rounded-2xl p-6 hover-lift ml-6 md:ml-0">
+              <motion.div
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                className="glass rounded-2xl p-6 hover-glow ml-6 md:ml-0"
+              >
                 <div className="flex items-center gap-2 text-accent text-sm font-medium mb-2">
                   <Calendar className="w-4 h-4" />
                   {exp.duration}
@@ -90,7 +93,7 @@ const Experience = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>

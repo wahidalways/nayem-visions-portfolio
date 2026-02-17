@@ -52,7 +52,8 @@ const Stats = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="glass rounded-2xl p-6 text-center hover-lift"
+              whileHover={{ y: -6, scale: 1.05, transition: { duration: 0.25 } }}
+              className="glass rounded-2xl p-6 text-center hover-glow"
             >
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
                 <stat.icon className="w-5 h-5 text-primary" />
