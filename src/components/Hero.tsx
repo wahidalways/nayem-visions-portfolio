@@ -1,18 +1,141 @@
 import { motion } from "framer-motion";
 import { ArrowDown, MapPin, Briefcase, User } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
+
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  duration: number;
+  delay: number;
+  opacity: number;
+}
+
+const ParticleField = () => {
+  const particles = useMemo<Particle[]>(() => {
+    return Array.from({ length: 40 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 4 + 1,
+      duration: Math.random() * 8 + 6,
+      delay: Math.random() * 5,
+      opacity: Math.random() * 0.3 + 0.05,
+    }));
+  }, []);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: p.size,
+            height: p.size,
+            background: p.id % 3 === 0
+              ? "hsl(var(--accent))"
+              : "hsl(var(--primary))",
+          }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{
+            opacity: [0, p.opacity, p.opacity, 0],
+            scale: [0, 1, 1, 0],
+            y: [0, -30 - Math.random() * 40, -60 - Math.random() * 40, -100],
+          }}
+          transition={{
+            duration: p.duration,
+            delay: p.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+const GridOverlay = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.03]">
+    <div
+      className="absolute inset-0"
+      style={{
+        backgroundImage: `
+          linear-gradient(hsl(var(--foreground)) 1px, transparent 1px),
+          linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)
+        `,
+        backgroundSize: "60px 60px",
+      }}
+    />
+  </div>
+);
+
+const FloatingConnectors = () => (
+  <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.06]" xmlns="http://www.w3.org/2000/svg">
+    <motion.line
+      x1="10%" y1="20%" x2="35%" y2="45%"
+      stroke="hsl(var(--primary))" strokeWidth="1"
+      initial={{ pathLength: 0 }}
+      animate={{ pathLength: 1 }}
+      transition={{ duration: 3, delay: 1, ease: "easeInOut" }}
+    />
+    <motion.line
+      x1="70%" y1="15%" x2="90%" y2="55%"
+      stroke="hsl(var(--accent))" strokeWidth="1"
+      initial={{ pathLength: 0 }}
+      animate={{ pathLength: 1 }}
+      transition={{ duration: 2.5, delay: 1.5, ease: "easeInOut" }}
+    />
+    <motion.line
+      x1="55%" y1="75%" x2="85%" y2="90%"
+      stroke="hsl(var(--primary))" strokeWidth="1"
+      initial={{ pathLength: 0 }}
+      animate={{ pathLength: 1 }}
+      transition={{ duration: 2, delay: 2, ease: "easeInOut" }}
+    />
+    <motion.circle cx="10%" cy="20%" r="3" fill="hsl(var(--primary))" opacity="0.2"
+      initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1 }} />
+    <motion.circle cx="35%" cy="45%" r="3" fill="hsl(var(--primary))" opacity="0.2"
+      initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2 }} />
+    <motion.circle cx="70%" cy="15%" r="3" fill="hsl(var(--accent))" opacity="0.2"
+      initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1.5 }} />
+    <motion.circle cx="90%" cy="55%" r="3" fill="hsl(var(--accent))" opacity="0.2"
+      initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5 }} />
+  </svg>
+);
 
 const Hero = () => {
   const [imgError, setImgError] = useState(false);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: "var(--gradient-hero-light)" }}>
-      {/* Animated background shapes */}
+      {/* Animated background layers */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-primary/5 animate-float blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-accent/5 animate-float blur-3xl" style={{ animationDelay: "2s" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/3 blur-[100px]" />
+        {/* Large ambient blobs */}
+        <motion.div
+          animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-20 -left-20 w-[500px] h-[500px] rounded-full bg-primary/5 blur-[120px]"
+        />
+        <motion.div
+          animate={{ x: [0, -25, 0], y: [0, 25, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-10 -right-20 w-[600px] h-[600px] rounded-full bg-accent/5 blur-[120px]"
+        />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-primary/[0.02] blur-[100px]" />
       </div>
+
+      {/* Particle field */}
+      <ParticleField />
+
+      {/* Subtle grid */}
+      <GridOverlay />
+
+      {/* Floating connector lines */}
+      <FloatingConnectors />
 
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
@@ -91,8 +214,12 @@ const Hero = () => {
           >
             <div className="relative">
               {/* Gradient glow behind */}
-              <div className="absolute inset-0 -m-4 rounded-full blur-2xl bg-primary/10" />
-              
+              <motion.div
+                animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.15, 0.1] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 -m-6 rounded-full blur-2xl bg-primary/10"
+              />
+
               <div className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden ring-4 ring-primary/10 ring-offset-4 ring-offset-background">
                 {!imgError ? (
                   <img
