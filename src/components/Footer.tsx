@@ -1,4 +1,4 @@
-import { Heart } from "lucide-react";
+
 
 const Footer = () => {
   return (
@@ -8,8 +8,8 @@ const Footer = () => {
         <p className="flex items-center gap-1">
           © {new Date().getFullYear()} Md. Wahiduzzaman Nayem. All rights reserved.
         </p>
-        <p className="flex items-center gap-1">
-          Built with <Heart className="w-3.5 h-3.5 text-destructive" /> & dedication
+        <p className="text-xs">
+          Designed & Developed by MWN
         </p>
       </div>
     </footer>
