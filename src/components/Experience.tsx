@@ -1,6 +1,6 @@
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { Building2, Calendar } from "lucide-react";
+import ScrollReveal from "./ScrollReveal";
 
 const experiences = [
   {
@@ -39,42 +39,32 @@ const experiences = [
 ];
 
 const Experience = () => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="experience" className="section-padding" ref={ref}>
+    <section id="experience" className="section-padding">
       <div className="container mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <ScrollReveal className="text-center mb-16">
           <span className="text-sm font-medium text-accent uppercase tracking-widest">Career</span>
           <h2 className="font-heading text-3xl md:text-5xl font-bold mt-3">Work Experience</h2>
-        </motion.div>
+        </ScrollReveal>
 
         <div className="max-w-4xl mx-auto relative">
-          {/* Timeline line */}
-          <div className="absolute left-0 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 bg-border" />
+          <div className="absolute left-4 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 bg-border" />
 
           {experiences.map((exp, i) => (
-            <motion.div
-              key={exp.title}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.2 }}
+            <ScrollReveal
+              key={exp.title + exp.duration}
+              direction={i % 2 === 0 ? "left" : "right"}
+              delay={i * 0.15}
               className={`relative mb-12 md:w-1/2 ${i % 2 === 0 ? "md:pr-12" : "md:ml-auto md:pl-12"}`}
             >
-              {/* Timeline dot */}
-              <div className="absolute top-6 -left-[5px] md:left-auto md:right-auto w-2.5 h-2.5 rounded-full bg-primary hidden md:block"
+              <div
+                className="absolute top-6 left-[11px] md:left-auto w-2.5 h-2.5 rounded-full bg-primary hidden md:block"
                 style={i % 2 === 0 ? { right: "-5px" } : { left: "-5px" }}
               />
 
               <motion.div
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="glass rounded-2xl p-6 hover-glow ml-6 md:ml-0"
+                className="glass rounded-2xl p-6 hover-glow ml-10 md:ml-0"
               >
                 <div className="flex items-center gap-2 text-accent text-sm font-medium mb-2">
                   <Calendar className="w-4 h-4" />
@@ -94,7 +84,7 @@ const Experience = () => {
                   ))}
                 </ul>
               </motion.div>
-            </motion.div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

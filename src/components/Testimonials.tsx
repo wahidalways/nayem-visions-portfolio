@@ -1,6 +1,6 @@
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
+import ScrollReveal from "./ScrollReveal";
 
 const testimonials = [
   {
@@ -21,41 +21,31 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="testimonials" className="section-padding bg-secondary/30" ref={ref}>
+    <section id="testimonials" className="section-padding bg-secondary/30">
       <div className="container mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <ScrollReveal className="text-center mb-16">
           <span className="text-sm font-medium text-accent uppercase tracking-widest">Testimonials</span>
           <h2 className="font-heading text-3xl md:text-5xl font-bold mt-3">What People Say</h2>
-        </motion.div>
+        </ScrollReveal>
 
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {testimonials.map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              whileHover={{ y: -8, scale: 1.03, transition: { duration: 0.25 } }}
-              className="glass rounded-2xl p-8 hover-glow relative"
-            >
-              <Quote className="w-8 h-8 text-primary/15 absolute top-6 right-6" />
-              <p className="text-sm text-muted-foreground leading-relaxed mb-6 relative z-10">
-                "{item.quote}"
-              </p>
-              <div className="border-t border-border pt-4">
-                <p className="font-heading font-semibold text-sm">{item.name}</p>
-                <p className="text-xs text-muted-foreground">{item.role}</p>
-              </div>
-            </motion.div>
+            <ScrollReveal key={i} delay={i * 0.12}>
+              <motion.div
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="glass rounded-2xl p-8 hover-glow relative h-full"
+              >
+                <Quote className="w-8 h-8 text-primary/15 absolute top-6 right-6" />
+                <p className="text-sm text-muted-foreground leading-relaxed mb-6 relative z-10">
+                  "{item.quote}"
+                </p>
+                <div className="border-t border-border pt-4">
+                  <p className="font-heading font-semibold text-sm">{item.name}</p>
+                  <p className="text-xs text-muted-foreground">{item.role}</p>
+                </div>
+              </motion.div>
+            </ScrollReveal>
           ))}
         </div>
       </div>
