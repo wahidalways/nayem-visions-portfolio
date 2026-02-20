@@ -1,17 +1,17 @@
-import { motion } from "framer-motion";
-import { ArrowDown, MapPin, Briefcase, User } from "lucide-react";
-import { useState, useEffect, useMemo } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowDown, MapPin, Briefcase, User, FileSearch, GitBranch, BarChart3 } from "lucide-react";
+import { useState, useEffect, useMemo, useRef } from "react";
 
 const ParticleField = () => {
   const particles = useMemo(() => {
-    return Array.from({ length: 18 }, (_, i) => ({
+    return Array.from({ length: 14 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
       size: Math.random() * 3 + 1,
-      duration: Math.random() * 10 + 8,
+      duration: Math.random() * 12 + 10,
       delay: Math.random() * 6,
-      opacity: Math.random() * 0.2 + 0.05,
+      opacity: Math.random() * 0.15 + 0.05,
     }));
   }, []);
 
@@ -29,17 +29,34 @@ const ParticleField = () => {
             background: p.id % 3 === 0 ? "hsl(var(--accent))" : "hsl(var(--primary))",
           }}
           initial={{ opacity: 0 }}
-          animate={{
-            opacity: [0, p.opacity, 0],
-            y: [0, -60],
-          }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={{ opacity: [0, p.opacity, 0], y: [0, -50] }}
+          transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: "easeInOut" }}
         />
+      ))}
+    </div>
+  );
+};
+
+const FloatingIcons = () => {
+  const icons = [
+    { Icon: FileSearch, x: "10%", y: "20%", delay: 0 },
+    { Icon: GitBranch, x: "85%", y: "30%", delay: 1.5 },
+    { Icon: BarChart3, x: "15%", y: "75%", delay: 3 },
+  ];
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {icons.map(({ Icon, x, y, delay }, i) => (
+        <motion.div
+          key={i}
+          className="absolute"
+          style={{ left: x, top: y }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 0.08, 0.04, 0.08], y: [0, -10, 0] }}
+          transition={{ duration: 8, delay, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Icon className="w-8 h-8 md:w-12 md:h-12 text-primary" />
+        </motion.div>
       ))}
     </div>
   );
@@ -96,14 +113,25 @@ const TypingEffect = ({ text, delay = 0 }: { text: string; delay?: number }) => 
 
 const Hero = () => {
   const [imgError, setImgError] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
     <section
+      ref={sectionRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{ background: "var(--gradient-hero-light)" }}
     >
-      {/* Ambient blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Parallax background layer */}
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ y: bgY }}>
+        {/* Ambient blobs */}
         <motion.div
           animate={{ x: [0, 20, 0], y: [0, -15, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
@@ -114,12 +142,16 @@ const Hero = () => {
           transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
           className="absolute bottom-10 -right-20 w-[500px] h-[500px] rounded-full bg-accent/5 blur-[100px]"
         />
-      </div>
+        <ParticleField />
+        <GridOverlay />
+        <FloatingIcons />
+      </motion.div>
 
-      <ParticleField />
-      <GridOverlay />
-
-      <div className="container mx-auto px-4 md:px-8 relative z-10 pt-24 md:pt-0">
+      {/* Content with parallax */}
+      <motion.div
+        className="container mx-auto px-4 md:px-8 relative z-10 pt-24 md:pt-0"
+        style={{ y: contentY, opacity }}
+      >
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-16">
           {/* Text content */}
           <div className="flex-1 text-center md:text-left order-2 md:order-1">
@@ -165,10 +197,10 @@ const Hero = () => {
               className="flex flex-col sm:flex-row items-center md:items-start gap-3 mb-6"
             >
               <motion.button
-                whileHover={{ scale: 1.04 }}
+                whileHover={{ scale: 1.04, boxShadow: "0 10px 30px hsl(var(--primary) / 0.3)" }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-                className="px-7 py-3 rounded-xl font-heading font-semibold text-sm bg-primary text-primary-foreground hover:opacity-90 transition-opacity cursor-pointer"
+                className="px-7 py-3 rounded-xl font-heading font-semibold text-sm bg-primary text-primary-foreground hover:opacity-90 transition-all cursor-pointer"
               >
                 Get In Touch
               </motion.button>
@@ -202,6 +234,11 @@ const Hero = () => {
             className="order-1 md:order-2 shrink-0"
           >
             <div className="relative">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute -inset-3 rounded-full border border-dashed border-primary/20"
+              />
               <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 lg:w-60 lg:h-60 rounded-full overflow-hidden ring-4 ring-primary/10 ring-offset-4 ring-offset-background">
                 {!imgError ? (
                   <img
@@ -219,7 +256,7 @@ const Hero = () => {
             </div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div
