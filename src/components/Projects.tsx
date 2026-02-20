@@ -1,6 +1,6 @@
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
+import ScrollReveal from "./ScrollReveal";
 
 const projects = [
   {
@@ -38,69 +38,53 @@ const projects = [
 ];
 
 const Projects = () => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="projects" className="section-padding bg-secondary/30" ref={ref}>
+    <section id="projects" className="section-padding bg-secondary/30">
       <div className="container mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <ScrollReveal className="text-center mb-16">
           <span className="text-sm font-medium text-accent uppercase tracking-widest">Portfolio</span>
           <h2 className="font-heading text-3xl md:text-5xl font-bold mt-3">Featured Projects</h2>
-        </motion.div>
+        </ScrollReveal>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {projects.map((project, i) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
-              className="glass rounded-2xl p-8 hover-glow group cursor-default"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="font-heading font-bold text-xl group-hover:text-primary transition-colors">{project.title}</h3>
-                  <p className="text-sm text-accent font-medium">{project.subtitle}</p>
-                </div>
-                <motion.div whileHover={{ scale: 1.2, rotate: 45 }}>
+            <ScrollReveal key={project.title} delay={i * 0.1}>
+              <motion.div
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="glass rounded-2xl p-8 hover-glow group cursor-default h-full"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="font-heading font-bold text-xl group-hover:text-primary transition-colors">{project.title}</h3>
+                    <p className="text-sm text-accent font-medium">{project.subtitle}</p>
+                  </div>
                   <ExternalLink className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                </motion.div>
-              </div>
+                </div>
 
-              <div className="space-y-3 mb-6">
-                <div>
-                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Challenge</span>
-                  <p className="text-sm text-muted-foreground mt-1">{project.problem}</p>
+                <div className="space-y-3 mb-6">
+                  <div>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Challenge</span>
+                    <p className="text-sm text-muted-foreground mt-1">{project.problem}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Solution</span>
+                    <p className="text-sm text-muted-foreground mt-1">{project.solution}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs font-semibold text-accent uppercase tracking-wider">Impact</span>
+                    <p className="text-sm text-foreground font-medium mt-1">{project.impact}</p>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Solution</span>
-                  <p className="text-sm text-muted-foreground mt-1">{project.solution}</p>
-                </div>
-                <div>
-                  <span className="text-xs font-semibold text-accent uppercase tracking-wider">Impact</span>
-                  <p className="text-sm text-foreground font-medium mt-1">{project.impact}</p>
-                </div>
-              </div>
 
-              <div className="flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
-                  <motion.span
-                    key={tag}
-                    whileHover={{ scale: 1.1 }}
-                    className="px-3 py-1 rounded-full bg-primary/10 text-xs font-medium text-primary"
-                  >
-                    {tag}
-                  </motion.span>
-                ))}
-              </div>
-            </motion.div>
+                <div className="flex flex-wrap gap-2">
+                  {project.tags.map((tag) => (
+                    <span key={tag} className="px-3 py-1 rounded-full bg-primary/10 text-xs font-medium text-primary">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            </ScrollReveal>
           ))}
         </div>
       </div>
