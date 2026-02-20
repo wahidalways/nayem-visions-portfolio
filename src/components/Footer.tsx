@@ -11,9 +11,9 @@ const Footer = () => {
           className="flex items-center gap-1.5 cursor-pointer"
         >
           <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "var(--gradient-primary)" }}>
-            <span className="font-heading text-[10px] font-bold text-primary-foreground">W</span>
+            <span className="font-heading text-[10px] font-bold text-primary-foreground">M</span>
           </div>
-          <span className="font-heading font-bold text-base text-foreground">Nayem</span>
+          <span className="font-heading font-bold text-base text-foreground">MWN</span>
           <span className="font-heading font-bold text-base text-accent">.</span>
         </motion.a>
         <p className="flex items-center gap-1">

@@ -113,10 +113,10 @@ const Preloader = ({ onComplete }: { onComplete: () => void }) => {
                     className="w-12 h-12 rounded-xl flex items-center justify-center"
                     style={{ background: "var(--gradient-primary)" }}
                   >
-                    <span className="font-heading text-xl font-bold text-primary-foreground">W</span>
+                    <span className="font-heading text-xl font-bold text-primary-foreground">M</span>
                   </motion.div>
                   <div className="flex items-baseline">
-                    {["N", "a", "y", "e", "m"].map((letter, i) => (
+                    {["M", "W", "N"].map((letter, i) => (
                       <motion.span
                         key={i}
                         initial={{ y: 20, opacity: 0, filter: "blur(6px)" }}

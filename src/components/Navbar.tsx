@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Menu, X, Sun, Moon, Download } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { toast } from "sonner";
@@ -15,6 +15,45 @@ const navItems = [
   { label: "Contact", href: "#contact" },
 ];
 
+const LogoMark = () => (
+  <div className="flex items-center gap-1.5">
+    <motion.div
+      whileHover={{ rotate: [0, -10, 10, 0] }}
+      transition={{ duration: 0.5 }}
+      className="relative w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center"
+      style={{ background: "var(--gradient-primary)" }}
+    >
+      <motion.span
+        animate={{ opacity: [1, 0.7, 1] }}
+        transition={{ duration: 3, repeat: Infinity }}
+        className="font-heading text-sm font-bold text-primary-foreground leading-none"
+      >
+        M
+      </motion.span>
+    </motion.div>
+    <div className="flex items-baseline">
+      {["M", "W", "N"].map((letter, i) => (
+        <motion.span
+          key={i}
+          initial={{ y: -10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 + i * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="font-heading text-lg font-bold text-foreground tracking-tight"
+        >
+          {letter}
+        </motion.span>
+      ))}
+      <motion.span
+        animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        className="font-heading text-lg font-bold text-accent"
+      >
+        .
+      </motion.span>
+    </div>
+  </div>
+);
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -24,7 +63,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -48,8 +87,7 @@ const Navbar = () => {
           visibleSections.forEach((_, id) => {
             const el = document.getElementById(id);
             if (el) {
-              const rect = el.getBoundingClientRect();
-              const dist = Math.abs(rect.top);
+              const dist = Math.abs(el.getBoundingClientRect().top);
               if (dist < closestDist) {
                 closestDist = dist;
                 closest = id;
@@ -98,7 +136,7 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 pt-4"
+      className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 pt-3"
     >
       <nav
         className={`mx-auto max-w-6xl flex items-center justify-between px-5 md:px-6 transition-all duration-500 rounded-full ${
@@ -110,31 +148,14 @@ const Navbar = () => {
         {/* Logo */}
         <a
           href="#"
-          className="flex items-center gap-0.5 group"
+          className="flex items-center group"
           onClick={(e) => {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         >
-          <motion.div
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative flex items-center"
-          >
-            {/* Logo mark */}
-            <div className="relative w-8 h-8 mr-2 rounded-lg overflow-hidden flex items-center justify-center" style={{ background: "var(--gradient-primary)" }}>
-              <span className="font-heading text-sm font-bold text-primary-foreground leading-none">W</span>
-            </div>
-            <span className="font-heading text-lg font-bold text-foreground tracking-tight">
-              Nayem
-            </span>
-            <motion.span
-              animate={{ opacity: [1, 0.4, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="font-heading text-lg font-bold text-accent"
-            >
-              .
-            </motion.span>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <LogoMark />
           </motion.div>
         </a>
 
