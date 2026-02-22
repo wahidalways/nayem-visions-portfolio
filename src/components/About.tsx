@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Target, Users, FileText, TrendingUp } from "lucide-react";
 import ScrollReveal from "./ScrollReveal";
+import BABackground from "./BABackground";
+import FlowchartAnimation from "./FlowchartAnimation";
 
 const highlights = [
   { icon: Target, label: "Requirement Analysis", desc: "Translating complex business needs into clear functional specifications" },
@@ -13,8 +15,9 @@ const domains = ["E-commerce", "HRIS & Payroll", "ERP & Logistics", "Process Aut
 
 const About = () => {
   return (
-    <section id="about" className="section-padding">
-      <div className="container mx-auto">
+    <section id="about" className="section-padding relative overflow-hidden">
+      <BABackground density="light" />
+      <div className="container mx-auto relative z-10">
         <ScrollReveal className="text-center mb-16">
           <span className="text-sm font-medium text-accent uppercase tracking-widest">About Me</span>
           <h2 className="font-heading text-3xl md:text-5xl font-bold mt-3">Professional Summary</h2>
@@ -41,6 +44,11 @@ const About = () => {
               </motion.div>
             </ScrollReveal>
           ))}
+        </div>
+
+        {/* Flowchart decoration */}
+        <div className="max-w-xs mx-auto mb-12">
+          <FlowchartAnimation />
         </div>
 
         <ScrollReveal delay={0.2} className="text-center">

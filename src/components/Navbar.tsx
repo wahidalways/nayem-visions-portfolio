@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { Menu, X, Sun, Moon, Download } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
-import { toast } from "sonner";
+import ResumeDropdown from "./ResumeDropdown";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const navItems = [
   { label: "About", href: "#about" },
@@ -88,10 +89,7 @@ const Navbar = () => {
             const el = document.getElementById(id);
             if (el) {
               const dist = Math.abs(el.getBoundingClientRect().top);
-              if (dist < closestDist) {
-                closestDist = dist;
-                closest = id;
-              }
+              if (dist < closestDist) { closestDist = dist; closest = id; }
             }
           });
           if (closest && closest !== activeSectionRef.current) {
@@ -110,10 +108,7 @@ const Navbar = () => {
       });
     }, 500);
 
-    return () => {
-      clearTimeout(timer);
-      observer.disconnect();
-    };
+    return () => { clearTimeout(timer); observer.disconnect(); };
   }, []);
 
   const handleNav = useCallback((href: string) => {
@@ -126,10 +121,6 @@ const Navbar = () => {
       setActiveSection(id);
     }
   }, []);
-
-  const handleDownload = () => {
-    toast.success("Download started!", { description: "Your resume is being downloaded." });
-  };
 
   return (
     <motion.header
@@ -145,14 +136,10 @@ const Navbar = () => {
             : "py-3 bg-background/60 backdrop-blur-md border border-border/50"
         }`}
       >
-        {/* Logo */}
         <a
           href="#"
           className="flex items-center group"
-          onClick={(e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
+          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
         >
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <LogoMark />
@@ -180,6 +167,7 @@ const Navbar = () => {
             );
           })}
           <div className="w-px h-5 bg-border mx-2" />
+          <ThemeSwitcher />
           <motion.button
             whileHover={{ scale: 1.1, rotate: 15 }}
             whileTap={{ scale: 0.9 }}
@@ -199,20 +187,12 @@ const Navbar = () => {
               </motion.div>
             </AnimatePresence>
           </motion.button>
-          <motion.a
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            href="/Wahiduzzaman_Nayem_CV.pdf"
-            download
-            onClick={handleDownload}
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium bg-primary text-primary-foreground hover:opacity-90 transition-opacity ml-1"
-          >
-            <Download className="w-3.5 h-3.5" /> Resume
-          </motion.a>
+          <ResumeDropdown />
         </div>
 
         {/* Mobile toggle */}
         <div className="flex xl:hidden items-center gap-2">
+          <ThemeSwitcher />
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -271,16 +251,7 @@ const Navbar = () => {
               </motion.button>
             ))}
             <div className="border-t border-border pt-3 mt-1">
-              <motion.a
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                href="/Wahiduzzaman_Nayem_CV.pdf"
-                download
-                onClick={handleDownload}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition-opacity w-fit"
-              >
-                <Download className="w-4 h-4" /> Resume
-              </motion.a>
+              <ResumeDropdown mobile />
             </div>
           </motion.div>
         )}

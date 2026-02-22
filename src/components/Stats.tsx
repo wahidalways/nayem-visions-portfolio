@@ -41,8 +41,23 @@ const Counter = ({ target, suffix }: { target: number; suffix: string }) => {
 
 const Stats = () => {
   return (
-    <section className="section-padding bg-secondary/30">
-      <div className="container mx-auto">
+    <section className="section-padding bg-secondary/30 relative overflow-hidden">
+      {/* Data visualization decoration */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+        {[20, 40, 60, 80].map((x, i) => (
+          <motion.line
+            key={i}
+            x1={`${x}%`} y1="90%" x2={`${x}%`} y2={`${90 - (i + 1) * 15}%`}
+            stroke="hsl(var(--primary))" strokeWidth="8" strokeLinecap="round"
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: i * 0.2 }}
+          />
+        ))}
+      </svg>
+
+      <div className="container mx-auto relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
           {stats.map((stat, i) => (
             <ScrollReveal key={stat.label} delay={i * 0.1}>
@@ -50,9 +65,14 @@ const Stats = () => {
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
                 className="glass rounded-2xl p-6 text-center hover-glow"
               >
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                <motion.div
+                  whileInView={{ rotate: [0, 10, -10, 0] }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + i * 0.1, duration: 0.6 }}
+                  className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3"
+                >
                   <stat.icon className="w-5 h-5 text-primary" />
-                </div>
+                </motion.div>
                 <Counter target={stat.value} suffix={stat.suffix} />
                 <p className="text-xs md:text-sm text-muted-foreground mt-2 font-medium">{stat.label}</p>
               </motion.div>
