@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { Building2, Calendar } from "lucide-react";
+import { Building2, Calendar, ArrowRight } from "lucide-react";
 import ScrollReveal from "./ScrollReveal";
+import BABackground from "./BABackground";
 
 const experiences = [
   {
@@ -40,15 +41,24 @@ const experiences = [
 
 const Experience = () => {
   return (
-    <section id="experience" className="section-padding">
-      <div className="container mx-auto">
+    <section id="experience" className="section-padding relative overflow-hidden">
+      <BABackground density="light" />
+      <div className="container mx-auto relative z-10">
         <ScrollReveal className="text-center mb-16">
           <span className="text-sm font-medium text-accent uppercase tracking-widest">Career</span>
           <h2 className="font-heading text-3xl md:text-5xl font-bold mt-3">Work Experience</h2>
         </ScrollReveal>
 
         <div className="max-w-4xl mx-auto relative">
-          <div className="absolute left-4 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 bg-border" />
+          {/* Animated timeline line */}
+          <motion.div
+            className="absolute left-4 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5"
+            style={{ background: "var(--gradient-primary)" }}
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+          />
 
           {experiences.map((exp, i) => (
             <ScrollReveal
@@ -57,10 +67,17 @@ const Experience = () => {
               delay={i * 0.15}
               className={`relative mb-12 md:w-1/2 ${i % 2 === 0 ? "md:pr-12" : "md:ml-auto md:pl-12"}`}
             >
+              {/* Timeline dot with pulse */}
               <div
-                className="absolute top-6 left-[11px] md:left-auto w-2.5 h-2.5 rounded-full bg-primary hidden md:block"
-                style={i % 2 === 0 ? { right: "-5px" } : { left: "-5px" }}
-              />
+                className="absolute top-6 left-[11px] md:left-auto hidden md:block"
+                style={i % 2 === 0 ? { right: "-7px" } : { left: "-7px" }}
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.4, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
+                  className="w-3.5 h-3.5 rounded-full bg-primary"
+                />
+              </div>
 
               <motion.div
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
@@ -77,10 +94,17 @@ const Experience = () => {
                 </p>
                 <ul className="space-y-2">
                   {exp.points.map((point, j) => (
-                    <li key={j} className="flex gap-2 text-sm text-muted-foreground">
-                      <span className="text-accent mt-1.5 shrink-0">•</span>
+                    <motion.li
+                      key={j}
+                      initial={{ opacity: 0, x: -5 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.1 + j * 0.05 }}
+                      className="flex gap-2 text-sm text-muted-foreground"
+                    >
+                      <ArrowRight className="w-3 h-3 text-accent mt-1.5 shrink-0" />
                       {point}
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </motion.div>

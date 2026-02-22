@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, FileText } from "lucide-react";
 import ScrollReveal from "./ScrollReveal";
 
 const projects = [
@@ -39,8 +39,18 @@ const projects = [
 
 const Projects = () => {
   return (
-    <section id="projects" className="section-padding bg-secondary/30">
-      <div className="container mx-auto">
+    <section id="projects" className="section-padding bg-secondary/30 relative overflow-hidden">
+      {/* Decorative process flow */}
+      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.03]">
+        <motion.rect x="5%" y="10%" width="8%" height="5%" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="0.5"
+          initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 0] }} transition={{ duration: 6, repeat: Infinity }}
+        />
+        <motion.rect x="87%" y="85%" width="8%" height="5%" rx="4" fill="none" stroke="hsl(var(--accent))" strokeWidth="0.5"
+          initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 0] }} transition={{ duration: 8, delay: 2, repeat: Infinity }}
+        />
+      </svg>
+
+      <div className="container mx-auto relative z-10">
         <ScrollReveal className="text-center mb-16">
           <span className="text-sm font-medium text-accent uppercase tracking-widest">Portfolio</span>
           <h2 className="font-heading text-3xl md:text-5xl font-bold mt-3">Featured Projects</h2>
@@ -51,8 +61,11 @@ const Projects = () => {
             <ScrollReveal key={project.title} delay={i * 0.1}>
               <motion.div
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                className="glass rounded-2xl p-8 hover-glow group cursor-default h-full"
+                className="glass rounded-2xl p-8 hover-glow group cursor-default h-full relative overflow-hidden"
               >
+                {/* Background document icon */}
+                <FileText className="absolute -bottom-4 -right-4 w-20 h-20 text-primary/[0.04]" />
+
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <h3 className="font-heading font-bold text-xl group-hover:text-primary transition-colors">{project.title}</h3>
@@ -78,9 +91,13 @@ const Projects = () => {
 
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
-                    <span key={tag} className="px-3 py-1 rounded-full bg-primary/10 text-xs font-medium text-primary">
+                    <motion.span
+                      key={tag}
+                      whileHover={{ scale: 1.05 }}
+                      className="px-3 py-1 rounded-full bg-primary/10 text-xs font-medium text-primary"
+                    >
                       {tag}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
               </motion.div>
